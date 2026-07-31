@@ -1,110 +1,575 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mamatha Singh | Backend Software Engineer</title>
-  <link rel="stylesheet" href="styles.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mamatha Singh — Software Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0A0F1C;
+    --surface:#111A2C;
+    --surface-2:#16223A;
+    --accent-teal:#5EEAD4;
+    --accent-teal-dim:#2A6E63;
+    --accent-amber:#F5A623;
+    --accent-violet:#A78BFA;
+    --text:#E7ECF5;
+    --text-muted:#8593AC;
+    --border:#223350;
+    --radius:12px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'IBM Plex Sans',sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important;}
+  }
+  a{color:inherit;}
+  h1,h2,h3,.display{font-family:'Space Grotesk',sans-serif;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 32px;}
+  ::selection{background:var(--accent-teal);color:var(--bg);}
+
+  /* ---------- ambient background ---------- */
+  .bg-grid{
+    position:fixed;inset:0;z-index:-2;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size:64px 64px;
+    opacity:0.15;
+    mask-image:radial-gradient(ellipse 80% 60% at 50% 0%, black 40%, transparent 90%);
+  }
+  #particles{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:0.55;}
+
+  /* ---------- nav ---------- */
+  nav{position:sticky;top:0;z-index:50;background:rgba(10,15,28,0.82);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);}
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:60px;}
+  .nav-id{display:flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--text-muted);}
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--accent-teal);box-shadow:0 0 8px var(--accent-teal);animation:pulse 2.4s ease-in-out infinite;flex-shrink:0;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.35;}}
+  .nav-links{display:flex;gap:26px;font-size:13.5px;font-family:'JetBrains Mono',monospace;}
+  .nav-links a{color:var(--text-muted);text-decoration:none;transition:color .2s;}
+  .nav-links a:hover{color:var(--accent-teal);}
+  .nav-links a:focus-visible{outline:2px solid var(--accent-teal);outline-offset:4px;border-radius:3px;}
+  @media (max-width:720px){.nav-links{display:none;}}
+
+  /* ---------- hero: terminal ---------- */
+  header.hero{padding:80px 0 50px;}
+  .terminal{
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+    overflow:hidden;box-shadow:0 30px 80px -30px rgba(0,0,0,0.6);
+  }
+  .term-bar{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--border);background:var(--surface-2);}
+  .term-bar .tb-dot{width:10px;height:10px;border-radius:50%;}
+  .tb-dot.r{background:#EF6461;} .tb-dot.y{background:#F5A623;} .tb-dot.g{background:#5EEAD4;}
+  .term-title{margin-left:8px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-muted);}
+  .term-body{padding:30px 32px 34px;font-family:'JetBrains Mono',monospace;}
+  .term-line{color:var(--text-muted);font-size:14px;margin-bottom:6px;}
+  .term-line .prompt{color:var(--accent-teal);margin-right:8px;}
+  h1.name{font-size:clamp(38px,6.5vw,66px);font-weight:700;letter-spacing:-0.02em;line-height:1.03;margin:10px 0 6px;font-family:'Space Grotesk',sans-serif;}
+  .typewrap{font-size:clamp(15px,2.2vw,19px);color:var(--accent-amber);font-weight:500;margin-bottom:18px;min-height:28px;}
+  .caret{display:inline-block;width:9px;height:1em;background:var(--accent-amber);vertical-align:text-bottom;margin-left:2px;animation:blink 1s steps(1) infinite;}
+  @keyframes blink{50%{opacity:0;}}
+  .summary-lede{max-width:620px;color:var(--text-muted);font-size:15.5px;margin:16px 0 22px;}
+  .meta-row{display:flex;flex-wrap:wrap;gap:20px;font-size:13px;color:var(--text-muted);margin-top:10px;}
+  .meta-row a{color:var(--text-muted);text-decoration:none;border-bottom:1px dashed var(--border);}
+  .meta-row a:hover{color:var(--accent-teal);border-color:var(--accent-teal);}
+  .readout{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:26px;border-top:1px solid var(--border);}
+  .readout div{padding:16px 4px 0;border-right:1px solid var(--border);}
+  .readout div:last-child{border-right:none;}
+  .readout .val{font-size:20px;font-weight:600;color:var(--accent-teal);}
+  .readout .lbl{font-size:11px;color:var(--text-muted);margin-top:4px;}
+  @media (max-width:640px){.readout{grid-template-columns:repeat(2,1fr);} .readout div{border-bottom:1px solid var(--border);padding-bottom:14px;}}
+
+  /* pipeline diagram */
+  .pipeline-panel{margin-top:22px;}
+  .pipeline-head{display:flex;justify-content:space-between;align-items:baseline;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--text-muted);margin-bottom:10px;}
+  .pipeline-head .tag{color:var(--accent-violet);}
+  svg.pipeline{width:100%;height:auto;display:block;}
+  .flow-dot{fill:var(--accent-teal);}
+  .node-box{fill:var(--surface-2);stroke:var(--border);stroke-width:1;}
+  .node-label{font-family:'JetBrains Mono',monospace;font-size:11px;fill:var(--text);}
+  .node-sub{font-family:'JetBrains Mono',monospace;font-size:10px;fill:var(--text-muted);}
+  .edge-label{font-family:'JetBrains Mono',monospace;font-size:10px;fill:var(--accent-amber);}
+  .edge-line{stroke:var(--border);stroke-width:1.5;fill:none;}
+
+  /* ---------- section shell ---------- */
+  section{padding:64px 0;border-top:1px solid var(--border);}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--accent-teal);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:10px;}
+  h2.section-title{font-size:clamp(24px,4vw,32px);font-weight:600;margin-bottom:32px;letter-spacing:-0.01em;}
+
+  /* ---------- experience: service registry ---------- */
+  .registry-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:0;}
+  .tab-btn{
+    font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--text-muted);
+    background:var(--surface);border:1px solid var(--border);border-bottom:none;
+    padding:12px 18px;border-radius:8px 8px 0 0;cursor:pointer;display:flex;align-items:center;gap:10px;
+    transition:color .2s, background .2s;
+  }
+  .tab-btn .ver{font-size:10.5px;padding:2px 7px;border-radius:999px;border:1px solid var(--border);color:var(--text-muted);}
+  .tab-btn.active{color:var(--text);background:var(--surface-2);}
+  .tab-btn.active .ver{color:var(--accent-teal);border-color:var(--accent-teal-dim);}
+  .tab-btn:hover{color:var(--text);}
+  .tab-btn:focus-visible{outline:2px solid var(--accent-teal);outline-offset:2px;}
+
+  .registry-panel{border:1px solid var(--border);border-radius:0 10px 10px 10px;background:var(--surface-2);overflow:hidden;}
+  .log-panel{display:none;padding:6px 0;}
+  .log-panel.active{display:block;}
+  .log-panel-head{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-muted);padding:16px 22px 12px;border-bottom:1px solid var(--border);}
+  .log-panel-head .cmd{color:var(--accent-violet);}
+  .commit-row{border-bottom:1px solid var(--border);}
+  .commit-row:last-child{border-bottom:none;}
+  .commit-head{
+    display:flex;align-items:baseline;gap:14px;padding:16px 22px;cursor:pointer;
+    font-family:'JetBrains Mono',monospace;
+  }
+  .commit-head:hover{background:rgba(94,234,212,0.04);}
+  .commit-head:focus-visible{outline:2px solid var(--accent-teal);outline-offset:-2px;}
+  .hash{color:var(--accent-teal);font-size:12.5px;flex-shrink:0;}
+  .msg{font-size:13.5px;color:var(--text);font-family:'IBM Plex Sans',sans-serif;flex:1;}
+  .chevron{color:var(--text-muted);font-size:11px;transition:transform .2s;flex-shrink:0;}
+  .commit-row.open .chevron{transform:rotate(90deg);color:var(--accent-teal);}
+  .commit-detail{max-height:0;overflow:hidden;transition:max-height .3s ease, padding .3s ease;padding:0 22px;}
+  .commit-row.open .commit-detail{max-height:200px;padding:0 22px 18px 22px;}
+  .commit-detail p{color:var(--text-muted);font-size:13.5px;padding-left:78px;border-left:2px solid var(--accent-teal-dim);margin-left:2px;}
+  @media (max-width:600px){.commit-detail p{padding-left:0;border-left:none;} .commit-head{flex-wrap:wrap;}}
+
+  /* ---------- projects: readme card ---------- */
+  .repo-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+  .repo-top{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;border-bottom:1px solid var(--border);background:var(--surface-2);font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--text-muted);}
+  .repo-top .repo-name{color:var(--text);font-size:14px;}
+  .repo-body{padding:26px 28px 28px;font-family:'JetBrains Mono',monospace;font-size:13.5px;}
+  .repo-body h4{font-family:'Space Grotesk',sans-serif;font-size:16px;color:var(--accent-teal);margin:18px 0 8px;}
+  .repo-body h4:first-child{margin-top:0;}
+  .repo-body ul{list-style:none;display:flex;flex-direction:column;gap:8px;font-family:'IBM Plex Sans',sans-serif;color:var(--text-muted);font-size:14px;}
+  .repo-body li{padding-left:18px;position:relative;}
+  .repo-body li::before{content:"-";position:absolute;left:0;color:var(--accent-amber);}
+  .chip-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px;}
+  .chip{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--accent-teal);border:1px solid var(--accent-teal-dim);background:rgba(94,234,212,0.06);padding:4px 10px;border-radius:999px;}
+
+  /* ---------- skills: directory listing ---------- */
+  .fs{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;font-family:'JetBrains Mono',monospace;}
+  .fs-head{padding:14px 22px;border-bottom:1px solid var(--border);color:var(--text-muted);font-size:12px;background:var(--surface-2);}
+  .fs-head .cmd{color:var(--accent-violet);}
+  details.dir{border-bottom:1px solid var(--border);}
+  details.dir:last-child{border-bottom:none;}
+  details.dir summary{padding:15px 22px;cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px;font-size:13.5px;color:var(--text);user-select:none;}
+  details.dir summary::-webkit-details-marker{display:none;}
+  details.dir summary::before{content:"▸";color:var(--accent-amber);transition:transform .2s;display:inline-block;}
+  details.dir[open] summary::before{transform:rotate(90deg);}
+  details.dir summary:hover{background:rgba(94,234,212,0.04);}
+  details.dir summary:focus-visible{outline:2px solid var(--accent-teal);outline-offset:-2px;}
+  .dir-count{margin-left:auto;color:var(--text-muted);font-size:11px;}
+  .dir-contents{padding:4px 22px 20px 46px;display:flex;flex-wrap:wrap;gap:8px;}
+  .dir-contents span{font-size:12.5px;color:var(--text-muted);background:var(--surface-2);border:1px solid var(--border);padding:4px 9px;border-radius:5px;transition:color .15s, border-color .15s;}
+  .dir-contents span:hover{color:var(--accent-teal);border-color:var(--accent-teal-dim);}
+
+  /* ---------- education ---------- */
+  .edu-item{display:flex;justify-content:space-between;gap:20px;padding:20px 0;border-top:1px solid var(--border);flex-wrap:wrap;}
+  .edu-item:last-child{border-bottom:1px solid var(--border);}
+  .edu-item h3{font-size:17px;font-weight:600;}
+  .edu-item .loc{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-muted);margin-top:3px;}
+  .edu-item .degree{color:var(--text-muted);font-size:14px;margin-top:3px;}
+
+  /* ---------- footer / contact ---------- */
+  footer{padding:64px 0 46px;}
+  .contact-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:40px 34px;text-align:center;}
+  .contact-panel h2{font-size:clamp(22px,4vw,30px);margin-bottom:10px;}
+  .contact-panel p{color:var(--text-muted);margin-bottom:24px;}
+  .contact-links{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;}
+  .contact-links button, .contact-links a{
+    font-family:'JetBrains Mono',monospace;font-size:13px;border:1px solid var(--border);
+    padding:10px 16px;border-radius:8px;text-decoration:none;color:var(--text);
+    background:transparent;cursor:pointer;transition:border-color .2s,color .2s;
+  }
+  .contact-links a:hover, .contact-links button:hover{border-color:var(--accent-teal);color:var(--accent-teal);}
+  .contact-links a:focus-visible, .contact-links button:focus-visible{outline:2px solid var(--accent-teal);outline-offset:2px;}
+  footer .fine{text-align:center;color:var(--text-muted);font-family:'JetBrains Mono',monospace;font-size:11px;margin-top:32px;}
+
+  .reveal{opacity:0;transform:translateY(14px);transition:opacity .6s ease, transform .6s ease;}
+  .reveal.in{opacity:1;transform:translateY(0);}
+</style>
 </head>
 <body>
 
-  <header class="container">
-    <h1>Mamatha Singh</h1>
-    <h2>Backend Software Engineer</h2>
-    <p class="tagline">
-      I build production-grade backend systems, APIs, and asynchronous workflows
-      with a focus on reliability, performance, and scalability.
-    </p>
+<div class="bg-grid"></div>
+<canvas id="particles"></canvas>
 
-    <div class="links">
-      <a href="https://github.com/mamatha-99" target="_blank">GitHub</a>
-      <a href="https://linkedin.com/in/mamatha-singh" target="_blank">LinkedIn</a>
-      <a href="mailto:singhmamatha29@gmail.com">Email</a>
+<nav>
+  <div class="wrap">
+    <div class="nav-id"><span class="dot"></span> mamatha_singh.service</div>
+    <div class="nav-links">
+      <a href="#experience">experience</a>
+      <a href="#projects">projects</a>
+      <a href="#skills">skills</a>
+      <a href="#education">education</a>
+      <a href="#contact">contact</a>
     </div>
-  </header>
+  </div>
+</nav>
 
-  <section class="container">
-    <h3>What I Build</h3>
-    <ul>
-      <li>Backend services and REST APIs used in production</li>
-      <li>Asynchronous and event-driven workflows</li>
-      <li>SQL-backed systems optimized for performance</li>
-      <li>Monitoring, alerting, and operational tooling</li>
-      <li>LLM-powered backend services</li>
-    </ul>
-  </section>
+<header class="hero">
+  <div class="wrap">
+    <div class="terminal reveal">
+      <div class="term-bar">
+        <span class="tb-dot r"></span><span class="tb-dot y"></span><span class="tb-dot g"></span>
+        <span class="term-title">~/mamatha-singh — zsh</span>
+      </div>
+      <div class="term-body">
+        <div class="term-line"><span class="prompt">$</span>whoami</div>
+        <h1 class="name">Mamatha Singh</h1>
+        <div class="typewrap"><span id="typed"></span><span class="caret"></span></div>
+        <p class="summary-lede">5+ years building cloud-native, event-driven systems in Java and Spring Boot — from high-throughput Kafka pipelines to RAG-based AI services — for platforms processing millions of transactions.</p>
+        <div class="meta-row">
+          <span>📍 Jersey City, NJ — open to relocation</span>
+          <span>✉ <a href="mailto:singhmamatha29@gmail.com">singhmamatha29@gmail.com</a></span>
+          <span>☎ <a href="tel:+12015904623">+1 (201) 590-4623</a></span>
+        </div>
 
-  <section class="container">
-    <h3>Featured Projects</h3>
+        <div class="readout">
+          <div><div class="val">5+ yrs</div><div class="lbl">experience</div></div>
+          <div><div class="val">&lt;100ms</div><div class="lbl">p95 search latency</div></div>
+          <div><div class="val">10K+</div><div class="lbl">concurrent users</div></div>
+          <div><div class="val">1.2M+</div><div class="lbl">daily transactions</div></div>
+        </div>
 
-    <div class="project">
-      <h4>AI-Powered Transit Chatbot</h4>
-      <p>
-        Backend system serving real-time, LLM-powered responses for transit-related
-        queries with low-latency and reliable request handling.
-      </p>
-      <ul>
-        <li>Built REST APIs using FastAPI</li>
-        <li>Integrated embeddings and retrieval-based logic</li>
-        <li>Designed async request handling for real-time usage</li>
-      </ul>
-      <p class="tech"><strong>Tech:</strong> Python, FastAPI, LLM APIs, Vector Embeddings</p>
-      <a href="https://github.com/mamatha-99" target="_blank">View on GitHub</a>
+        <div class="pipeline-panel">
+          <div class="pipeline-head">
+            <span><span class="tag">→</span> event_pipeline.svg — a pattern I build often</span>
+            <span>kafka · spring boot · redis</span>
+          </div>
+          <svg class="pipeline" viewBox="0 0 920 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagram of an event-driven pipeline: member events flow through a Kafka topic into Spring Boot consumer services, cached in Redis, and served through a REST API at sub-100 millisecond latency.">
+            <path class="edge-line" d="M120,80 H260"/>
+            <path class="edge-line" d="M420,80 H560"/>
+            <path class="edge-line" d="M720,80 H800"/>
+            <circle class="flow-dot" r="3.5" cx="120" cy="80">
+              <animateMotion dur="2.6s" repeatCount="indefinite" path="M0,0 H140"/>
+            </circle>
+            <circle class="flow-dot" r="3.5" cx="420" cy="80">
+              <animateMotion dur="2.6s" begin="0.6s" repeatCount="indefinite" path="M0,0 H140"/>
+            </circle>
+            <circle class="flow-dot" r="3.5" cx="720" cy="80">
+              <animateMotion dur="2.6s" begin="1.2s" repeatCount="indefinite" path="M0,0 H80"/>
+            </circle>
+            <rect class="node-box" x="10" y="52" width="110" height="56" rx="8"/>
+            <text class="node-label" x="65" y="76" text-anchor="middle">Member Events</text>
+            <text class="node-sub" x="65" y="92" text-anchor="middle">producer</text>
+            <rect class="node-box" x="260" y="46" width="160" height="68" rx="8"/>
+            <text class="node-label" x="340" y="72" text-anchor="middle">Kafka Topic</text>
+            <text class="node-sub" x="340" y="88" text-anchor="middle">5K+ events / min</text>
+            <text class="edge-label" x="190" y="70" text-anchor="middle">publish</text>
+            <rect class="node-box" x="560" y="46" width="160" height="68" rx="8"/>
+            <text class="node-label" x="640" y="68" text-anchor="middle">Spring Boot</text>
+            <text class="node-label" x="640" y="82" text-anchor="middle">Consumer Services</text>
+            <text class="node-sub" x="640" y="98" text-anchor="middle">+ Redis cache</text>
+            <text class="edge-label" x="490" y="70" text-anchor="middle">consume</text>
+            <rect class="node-box" x="800" y="52" width="110" height="56" rx="8"/>
+            <text class="node-label" x="855" y="76" text-anchor="middle">REST API</text>
+            <text class="node-sub" x="855" y="92" text-anchor="middle">&lt;100ms p95</text>
+            <text class="edge-label" x="760" y="70" text-anchor="middle">serve</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="experience">
+  <div class="wrap">
+    <div class="eyebrow">// service_registry</div>
+    <h2 class="section-title">Experience</h2>
+
+    <div class="registry-tabs">
+      <button class="tab-btn active" data-target="bcbsa">bcbsa <span class="ver">current</span></button>
+      <button class="tab-btn" data-target="accenture">accenture <span class="ver">2021–24</span></button>
+      <button class="tab-btn" data-target="cognizant">cognizant <span class="ver">2020–21</span></button>
     </div>
 
-    <div class="project">
-      <h4>Cloud-Based Finance Management Platform</h4>
-      <p>
-        Multi-user backend platform deployed on AWS, designed for uptime,
-        secure data handling, and operational stability.
-      </p>
-      <ul>
-        <li>Developed backend services on AWS EC2</li>
-        <li>Optimized SQL queries and schema design</li>
-        <li>Achieved 99% uptime with proactive monitoring</li>
-      </ul>
-      <p class="tech"><strong>Tech:</strong> Python, AWS EC2, SQL, Docker</p>
-      <a href="https://github.com/mamatha-99" target="_blank">View on GitHub</a>
+    <div class="registry-panel reveal">
+      <!-- BCBSA -->
+      <div class="log-panel active" id="bcbsa">
+        <div class="log-panel-head"><span class="cmd">$</span> git log --oneline services/bcbsa &nbsp;—&nbsp; Software Developer · Sep 2024–Present</div>
+
+        <div class="commit-row">
+          <div class="commit-head" tabindex="0"><span class="hash">a3f9c2e</span><span class="msg">feat: distributed healthcare search &amp; recommendation platform</span><span class="chevron">›</span></div>
+          <div class="commit-detail"><p>Java, Spring Boot, and Elasticsearch delivering sub-100ms search for 10K+ members across large healthcare datasets.</p></div>
+        </div>
+        <div class="commit-row">
+          <div class="commit-head" tabindex="0"><span class="hash">7b1d0f4</span><span class="msg">feat: real-time event-driven member engagement pipeline</span><span class="chevron">›</span></div>
+          <div class="commit-detail"><p>Kafka + Java processing 5K+ member interaction and healthcare events per minute for care navigation and preventive recommendations.</p></div>
+        </div>
+        <div class="commit-row">
+          <div class="commit-head" tabindex="0"><span class="hash">e64a1c9</span><span class="msg">feat: AI-assisted provider ranking &amp; care recommendations</span><span class="chevron">›</span></div>
+          <div class="commit-detail"><p>LLM-assisted relevance scoring across provider ranking and member support workflows, improving information discovery.</p></div>
+        </div>
+        <div class="commit-row">
+          <div class="commit-head" tabindex="0"><span class="hash">2f8e77b</span><span class="msg">feat: productionize RAG-based member assistance service</span><span class="chevron">›</span></div>
+          <div class="commit-detail"><p>Secure Java REST APIs delivering contextual plan information, benefits explanations, and provider insights.</p></div>
+        </div>
+        <div class="commit-row">
+          <div class="commit-head" tabindex="0"><span class="hash">9c3b5aa</span><span class="msg">perf: caching &amp; async processing overhaul</span><span class="chevron">›</span></div>
+          <div class="commit-detail"><p>Redis caching and optimized query execution sustaining 10K+ concurrent users at consistent low latency.</p></div>
+        </div>
+        <div class="commit-row">
+          <div class="commit-head" tabindex="0"><span class="hash">d015fe2</span><span class="msg">chore: containerized microservice rollout</span><span class="chevron">›</span></div>
+          <div class="commit-detail"><p>Docker, Kubernetes, and AWS deployment for high availability, fault tolerance, and seamless scaling.</p></div>
+        </div>
+        <div class="commit-row">
+          <div class="commit-head" tabindex="0"><span class="hash">4a7c810</span><span class="msg">fix: hardened auth &amp; access control</span><span class="chevron">›</span></div>
+          <div class="commit-detail"><p>JWT-based authentication via Keycloak with role-based access controls, cutting unauthorized access attempts ~20%.</p></div>
+        </div>
+      </div>
+
+      <!-- Accenture -->
+      <div class="log-panel" id="accenture">
+        <div class="log-panel-head"><span class="cmd">$</span> git log --oneline services/accenture &nbsp;—&nbsp; Software Developer · Jul 2021–Jan 2024</div>
+
+        <div class="commit-row">
+          <div class="commit-head" tabindex="0"><span class="hash">61bce3d</span><span class="msg">feat: real-time transaction insights API</span><span class="chevron">›</span></div>
+          <div class="commit-detail"><p>Java + Spring Boot REST API serving personalized spending insights for millions of users.</p></div>
+        </div>
+        <div class="commit-row">
+          <div class="commit-head" tabindex="0"><span class="hash">f204a91</span><span class="msg">feat: rule-based merchant categorization engine</span><span class="chevron">›</span></div>
+          <div class="commit-detail"><p>Automated mapping of raw merchant data into financial categories at 99.9% classification accuracy.</p></div>
+        </div>
+        <div class="commit-row">
+          <div class="commit-head" tabindex="0"><span class="hash">8d3f0c7</span><span class="msg">perf: Redis caching layer for hot lookups</span><span class="chevron">›</span></div>
+          <div class="commit-detail"><p>Cut backend database load by 35% and improved UI data retrieval speed by 30%.</p></div>
+        </div>
+        <div class="commit-row">
+          <div class="commit-head" tabindex="0"><span class="hash">b57e12a</span><span class="msg">feat: Kafka ingestion pipeline for daily transactions</span><span class="chevron">›</span></div>
+          <div class="commit-detail"><p>1.2M+ daily transactions ingested and processed with sub-second synchronized account analytics.</p></div>
+        </div>
+        <div class="commit-row">
+          <div class="commit-head" tabindex="0"><span class="hash">c916d4f</span><span class="msg">chore: infra on AWS via Docker &amp; Terraform</span><span class="chevron">›</span></div>
+          <div class="commit-detail"><p>Scalable, highly available API infrastructure provisioned as code.</p></div>
+        </div>
+        <div class="commit-row">
+          <div class="commit-head" tabindex="0"><span class="hash">0a2f6e8</span><span class="msg">perf: architected for peak-traffic surges</span><span class="chevron">›</span></div>
+          <div class="commit-detail"><p>Maintained stability and performance through 3x traffic surges during peak transaction periods.</p></div>
+        </div>
+      </div>
+
+      <!-- Cognizant -->
+      <div class="log-panel" id="cognizant">
+        <div class="log-panel-head"><span class="cmd">$</span> git log --oneline services/cognizant &nbsp;—&nbsp; Associate Software Engineer · Jul 2020–Jun 2021</div>
+
+        <div class="commit-row">
+          <div class="commit-head" tabindex="0"><span class="hash">3e9a04b</span><span class="msg">feat: real-time chat, posts &amp; interactions API</span><span class="chevron">›</span></div>
+          <div class="commit-detail"><p>Java Spring Boot REST APIs for a local networking platform serving 10K+ active users.</p></div>
+        </div>
+        <div class="commit-row">
+          <div class="commit-head" tabindex="0"><span class="hash">7c1f38d</span><span class="msg">chore: microservices containerization</span><span class="chevron">›</span></div>
+          <div class="commit-detail"><p>Docker-based deployment improving efficiency and enabling 30% faster scaling during peak usage.</p></div>
+        </div>
+        <div class="commit-row">
+          <div class="commit-head" tabindex="0"><span class="hash">f4b7a20</span><span class="msg">feat: Kafka-powered real-time updates</span><span class="chevron">›</span></div>
+          <div class="commit-detail"><p>Notifications and location-based posts processing 5K+ events per minute with low-latency delivery.</p></div>
+        </div>
+        <div class="commit-row">
+          <div class="commit-head" tabindex="0"><span class="hash">d820e5c</span><span class="msg">fix: secured service-to-service communication</span><span class="chevron">›</span></div>
+          <div class="commit-detail"><p>Keycloak + JWT with rate limiting on reward systems, improving reliability by ~20%.</p></div>
+        </div>
+      </div>
     </div>
+  </div>
+</section>
 
-    <div class="project">
-      <h4>Enterprise Backend Automation Systems</h4>
-      <p>
-        Designed and operated 12+ production backend systems supporting
-        SLA-critical enterprise workflows executed daily.
-      </p>
-      <ul>
-        <li>Asynchronous task orchestration and monitoring</li>
-        <li>Reduced SQL query latency by 20%</li>
-        <li>Improved MTTR by 30% via centralized dashboards</li>
-        <li>Maintained 98% uptime across mission-critical systems</li>
-      </ul>
-      <p class="tech"><strong>Tech:</strong> Python, SQL, REST APIs, AWS, Docker</p>
+<section id="projects">
+  <div class="wrap">
+    <div class="eyebrow">// selected_work</div>
+    <h2 class="section-title">Projects</h2>
+    <div class="repo-card reveal">
+      <div class="repo-top">
+        <span class="repo-name">📁 mta-transit-chatbot</span>
+        <span>Yeshiva University</span>
+      </div>
+      <div class="repo-body">
+        <h4># MTA AI-Powered Transit Chatbot</h4>
+        <ul>
+          <li>AI-powered transit navigation chatbot in Python using OpenAI GPT models, routing across 100+ subway stations.</li>
+          <li>Modeled GTFS transit data as a weighted graph (1,000+ edges) and implemented Dijkstra's algorithm for sub-second optimal route computation.</li>
+          <li>LLM function calling wired into backend transit APIs for real-time arrivals, service alerts, and navigation guidance.</li>
+          <li>Deterministic backend validation layer to reduce hallucinations and improve response accuracy.</li>
+          <li>REST APIs for route planning and transit queries built with Spring Boot and SQLite/PostgreSQL, using context-aware prompts and structured outputs.</li>
+        </ul>
+        <div class="chip-row">
+          <span class="chip">Python</span><span class="chip">OpenAI GPT</span><span class="chip">Spring Boot</span>
+          <span class="chip">Dijkstra's Algorithm</span><span class="chip">GTFS</span><span class="chip">PostgreSQL</span>
+        </div>
+      </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section class="container">
-    <h3>How I Think About Systems</h3>
-    <ul>
-      <li>Design for failure, recovery, and observability</li>
-      <li>Prefer async workflows for scalability</li>
-      <li>Optimize databases before scaling infrastructure</li>
-      <li>Measure latency, errors, and throughput early</li>
-    </ul>
-  </section>
+<section id="skills">
+  <div class="wrap">
+    <div class="eyebrow">// stack</div>
+    <h2 class="section-title">Technical Skills</h2>
 
-  <section class="container">
-    <h3>Technical Skills</h3>
-    <p><strong>Languages:</strong> Python, SQL, Java</p>
-    <p><strong>Backend:</strong> REST APIs, FastAPI, Async Processing</p>
-    <p><strong>Databases:</strong> PostgreSQL, Relational Modeling</p>
-    <p><strong>Cloud & DevOps:</strong> AWS (EC2, S3), Docker, Git</p>
-    <p><strong>AI:</strong> LLM APIs, Embeddings, Prompt Orchestration</p>
-  </section>
+    <div class="fs reveal">
+      <div class="fs-head"><span class="cmd">$</span> ls -la /skills — click a directory to expand</div>
 
-  <footer class="container footer">
-    <p>© 2026 Mamatha Singh</p>
-  </footer>
+      <details class="dir" open>
+        <summary>languages/<span class="dir-count">5 items</span></summary>
+        <div class="dir-contents"><span>Java</span><span>Python</span><span>JavaScript</span><span>TypeScript</span><span>Kotlin</span></div>
+      </details>
+      <details class="dir">
+        <summary>frameworks/<span class="dir-count">7 items</span></summary>
+        <div class="dir-contents"><span>Spring Boot</span><span>Spring MVC</span><span>Angular</span><span>React</span><span>Node.js</span><span>Express.js</span><span>RxJS</span></div>
+      </details>
+      <details class="dir">
+        <summary>databases/<span class="dir-count">7 items</span></summary>
+        <div class="dir-contents"><span>MySQL</span><span>PostgreSQL</span><span>Oracle</span><span>MongoDB</span><span>Cassandra</span><span>Redis</span><span>GCP Datastore</span></div>
+      </details>
+      <details class="dir">
+        <summary>cloud_devops/<span class="dir-count">8 items</span></summary>
+        <div class="dir-contents"><span>AWS</span><span>GCP</span><span>Azure</span><span>Docker</span><span>Kubernetes</span><span>Terraform</span><span>Jenkins</span><span>GitHub Actions</span></div>
+      </details>
+      <details class="dir">
+        <summary>ai_systems/<span class="dir-count">7 items</span></summary>
+        <div class="dir-contents"><span>LLMs</span><span>RAG</span><span>Prompt Engineering</span><span>Embeddings</span><span>LangChain</span><span>Vector DBs</span><span>TensorFlow</span></div>
+      </details>
+      <details class="dir">
+        <summary>monitoring_testing/<span class="dir-count">8 items</span></summary>
+        <div class="dir-contents"><span>Elasticsearch</span><span>Datadog</span><span>Splunk</span><span>Grafana</span><span>JUnit</span><span>Mockito</span><span>Cypress</span><span>Postman</span></div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section id="education">
+  <div class="wrap">
+    <div class="eyebrow">// education</div>
+    <h2 class="section-title">Education</h2>
+    <div class="edu-item">
+      <div><h3>Yeshiva University</h3><div class="degree">Master of Science, Data Analytics</div></div>
+      <div class="loc">New York, NY</div>
+    </div>
+    <div class="edu-item">
+      <div><h3>Institute of Aeronautical Engineering</h3><div class="degree">Bachelor of Technology, Information Technology</div></div>
+      <div class="loc">Hyderabad, India</div>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap">
+    <div class="contact-panel reveal">
+      <h2>Let's build something reliable.</h2>
+      <p>Open to backend, distributed systems, and GenAI engineering roles — Jersey City, NJ, willing to relocate.</p>
+      <div class="contact-links">
+        <a href="mailto:singhmamatha29@gmail.com">✉ singhmamatha29@gmail.com</a>
+        <a href="tel:+12015904623">☎ +1 (201) 590-4623</a>
+      </div>
+    </div>
+    <div class="fine">// end_of_file — built with intent, deployed with care</div>
+  </div>
+</footer>
+
+<script>
+  // reveal-on-scroll
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => io.observe(el));
+
+  // typewriter
+  const phrases = ["Distributed Systems Engineer", "Kafka & Event-Driven Architecture", "GenAI / RAG Systems"];
+  const typedEl = document.getElementById('typed');
+  let pi = 0, ci = 0, deleting = false;
+  function tick(){
+    const word = phrases[pi];
+    if(!deleting){
+      ci++;
+      typedEl.textContent = word.slice(0, ci);
+      if(ci === word.length){ deleting = true; setTimeout(tick, 1400); return; }
+    } else {
+      ci--;
+      typedEl.textContent = word.slice(0, ci);
+      if(ci === 0){ deleting = false; pi = (pi+1) % phrases.length; }
+    }
+    setTimeout(tick, deleting ? 35 : 60);
+  }
+  tick();
+
+  // registry tabs
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.log-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.target).classList.add('active');
+    });
+  });
+
+  // commit expand/collapse
+  document.querySelectorAll('.commit-head').forEach(head => {
+    const toggle = () => head.parentElement.classList.toggle('open');
+    head.addEventListener('click', toggle);
+    head.addEventListener('keydown', (e) => { if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); toggle(); }});
+  });
+  // open first commit of default panel
+  document.querySelector('#bcbsa .commit-row').classList.add('open');
+
+  // ambient particle network
+  (function(){
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    let w, h, particles;
+    function resize(){
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = Math.min(window.innerHeight, 900);
+    }
+    function init(){
+      resize();
+      const count = Math.min(46, Math.floor(w/32));
+      particles = Array.from({length: count}, () => ({
+        x: Math.random()*w, y: Math.random()*h,
+        vx: (Math.random()-0.5)*0.25, vy: (Math.random()-0.5)*0.25
+      }));
+    }
+    function step(){
+      ctx.clearRect(0,0,w,h);
+      particles.forEach(p => {
+        p.x += p.vx; p.y += p.vy;
+        if(p.x < 0 || p.x > w) p.vx *= -1;
+        if(p.y < 0 || p.y > h) p.vy *= -1;
+      });
+      for(let i=0;i<particles.length;i++){
+        for(let j=i+1;j<particles.length;j++){
+          const a = particles[i], b = particles[j];
+          const d = Math.hypot(a.x-b.x, a.y-b.y);
+          if(d < 140){
+            ctx.strokeStyle = `rgba(94,234,212,${0.10 * (1 - d/140)})`;
+            ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+          }
+        }
+      }
+      particles.forEach(p => {
+        ctx.fillStyle = 'rgba(94,234,212,0.45)';
+        ctx.beginPath(); ctx.arc(p.x,p.y,1.4,0,Math.PI*2); ctx.fill();
+      });
+      requestAnimationFrame(step);
+    }
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    init();
+    window.addEventListener('resize', init);
+    if(!reduced) requestAnimationFrame(step);
+  })();
+</script>
 
 </body>
 </html>
